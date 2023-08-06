@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\API\ReferralTreeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/users', [AdminController::class, 'getUsers']);
 });
+
+Route::get('/referral-tree/{userId}', [ReferralTreeController::class, 'getReferralTree']);

@@ -47,7 +47,8 @@ export default function Dashboard({ auth }) {
                             <div className="font-bold text-gray-700">Referral Points:</div>
                             <div className="text-gray-500">{auth.user.referral_points}</div>
                         </div>
-                    </div>
+  
+                        </div>
                 </div>
             </div>
         </AuthenticatedLayout>
