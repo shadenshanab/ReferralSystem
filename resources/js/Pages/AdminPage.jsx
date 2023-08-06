@@ -72,7 +72,7 @@ const MetricsChart = ({ totalUsers, totalPointsAwarded, levelDistribution }) => 
                         paper_bgcolor: 'rgba(245, 245, 245, 1)',
                         displaylogo: false,
                     }} />
-                </div>            
+                </div>
                 <div class=" w-1/3 ">
                     <Plot data={distributionChart} layout={{
                         width: 400,
@@ -139,7 +139,7 @@ export default function AdminPage({ users, auth, totalUsers, totalPointsAwarded,
                                                 Registration Date</th>
                                             <th scope="col" class="px-6 py-4 ">
                                                 Total Points Earned</th>
-                                                <th scope="col" class="px-6 py-4 ">
+                                            <th scope="col" class="px-6 py-4 ">
                                                 Number of Reffered Users</th>
                                         </tr>
                                     </thead>
@@ -151,20 +151,20 @@ export default function AdminPage({ users, auth, totalUsers, totalPointsAwarded,
                                                 <td class="whitespace-nowrap px-6 py-4">{user.created_at}</td>
                                                 <td class="whitespace-nowrap px-6 py-4">{user.referral_points}</td>
                                                 <td class="whitespace-nowrap px-6 py-4">{user.referred_users}</td>
-                                                
+
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            <div>
-                            <MetricsChart 
-                                totalUsers={totalUsers}
-                                totalPointsAwarded={totalPointsAwarded}
-                                levelDistribution={levelDistribution}
-                            />                            
-                            </div>                        
+                                <div>
+                                    <MetricsChart
+                                        totalUsers={totalUsers}
+                                        totalPointsAwarded={totalPointsAwarded}
+                                        levelDistribution={levelDistribution}
+                                    />
+                                </div>
 
-                        </div>
+                            </div>
                         </div>
 
                     </div>

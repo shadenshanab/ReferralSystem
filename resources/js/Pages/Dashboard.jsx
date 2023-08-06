@@ -1,5 +1,4 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import ReferralTree from '@/Components/ReferralTree';
 import { Head } from '@inertiajs/react';
 import React, { useState } from 'react';
 
@@ -48,9 +47,8 @@ export default function Dashboard({ auth }) {
                             <div className="font-bold text-gray-700">Referral Points:</div>
                             <div className="text-gray-500">{auth.user.referral_points}</div>
                         </div>
-                        {/* <ReferralTree className="ml-20" userData={auth.user} /> */}
-
-                    </div>
+  
+                        </div>
                 </div>
             </div>
         </AuthenticatedLayout>

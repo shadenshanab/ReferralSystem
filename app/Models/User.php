@@ -92,7 +92,6 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'referrer_id');
     }
 
-
     public function getLevel(): string
     {
         if ($this->referral_points >= 101) {
@@ -106,20 +105,19 @@ class User extends Authenticatable
 
     public function getLevelBadge(): string
     {
-        $badgeUrls = [
-            'Novice Referrer' => 'https://media.discordapp.net/attachments/841047219549634580/1137061719190024344/novice-referrer-high-resolution-logo-color-on-transparent-background.png?width=1062&height=662',
-            'Expert Referrer' => 'https://media.discordapp.net/attachments/841047219549634580/1137061718883827712/expert-referrer-high-resolution-logo-color-on-transparent-background.png?width=1062&height=662',
-            'Master Referrer' => 'https://media.discordapp.net/attachments/841047219549634580/1137061718615412847/master-referrer-high-resolution-logo-color-on-transparent-background.png?width=1062&height=662',
-        ];
+        if ($this->referral_points >= 101) {            
+            return 'https://media.discordapp.net/attachments/841047219549634580/1137061718615412847/master-referrer-high-resolution-logo-color-on-transparent-background.png?width=1062&height=662';
 
-        $level = $this->getLevel();
-
-        return $badgeUrls[$level] ?? ''; // Return the URL for the user's level, or an empty string if level is not found
+        } elseif ($this->referral_points >= 51) {
+            return 'https://media.discordapp.net/attachments/841047219549634580/1137061718883827712/expert-referrer-high-resolution-logo-color-on-transparent-background.png?width=1062&height=662';
+        } else {            
+            return 'https://media.discordapp.net/attachments/841047219549634580/1137061719190024344/novice-referrer-high-resolution-logo-color-on-transparent-background.png?width=1062&height=662';
+        }
     }
 
     public function assignReferralPoints()
     {
-        $referralCount = $this->referrals()->count(); // Assuming you have defined the 'referrals' relationship
+        $referralCount = $this->referrals()->count(); 
 
         if ($referralCount >= 1 && $referralCount <= 5) {
             $this->referral_points += 5;
@@ -128,10 +126,9 @@ class User extends Authenticatable
         } elseif ($referralCount > 10) {
             $this->referral_points += 10;
         }
-
-        $this->save();
         $this->updateLevel();
-
+        $this->updateBadge();
+        $this->save();
     }
 
     public function updateLevel()
@@ -142,5 +139,29 @@ class User extends Authenticatable
             $this->save();
         }
     }
+
+    public function updateBadge()
+    {
+        $newLevelBadge = $this->getLevelBadge();
+        if ($this->level_badge !== $newLevelBadge) {
+            $this->level_badge = $newLevelBadge;
+            $this->save();
+        }
+    }
+
+public function buildReferralTree()
+{
+    $referralTree = [];
+
+    foreach ($this->referrals as $referral) {
+        $referralTree[] = [
+            'user' => $referral,
+            'referrals' => $referral->buildReferralTree(),
+        ];
+    }
+
+    return $referralTree;
+}
+
 
 }

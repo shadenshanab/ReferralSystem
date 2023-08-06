@@ -24,17 +24,26 @@ export default function Authenticated({ user, header, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 {user.role === 'admin'?(
-                                    <>
-                                    <NavLink href={('/admin')} active={(route().current('/admin'))}>
-                                        Admin
-                                    </NavLink>                                    
+                                    <>                                    
                                     <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                         Dashboard
                                     </NavLink>
+                                    <NavLink href={('/my-clients')} active={(route().current('/admin'))}>
+                                        My Clients
+                                    </NavLink>  
+                                    <NavLink href={('/admin')} active={(route().current('/admin'))}>
+                                        Admin
+                                    </NavLink>                                    
+
                                     </>):(
+                                        <>
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
-                                </NavLink>)}
+                                </NavLink>
+                                <NavLink href={('/my-clients')} active={(route().current('/admin'))}>
+                                        My Clients
+                                </NavLink> 
+                                </>)}
                             </div>
                         </div>
 

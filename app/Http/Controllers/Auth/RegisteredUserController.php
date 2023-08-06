@@ -54,10 +54,6 @@ class RegisteredUserController extends Controller
         $validator->validate();
     
         $referrer = User::whereUsername(Session::pull('referrer'))->first();
-
-        print_r("hello world!");
-        print_r(Session::pull('referrer'));
-        print_r(Session::pull('ref'));
     
         $user = User::create([
             'name' => $request->name,
@@ -69,7 +65,7 @@ class RegisteredUserController extends Controller
             'referrer_id' => $referrer ? $referrer->id : null,
             'referral_points' => 0,
             'level' => $referrer ? $referrer->getLevel() : 'Novice Referrer',
-            'level_badge' => $referrer ? $referrer->getLevelBadge() : 'https://media.discordapp.net/attachments/841047219549634580/1137061719190024344/novice-referrer-high-resolution-logo-color-on-transparent-background.png?width=1062&height=662',
+            'level_badge' => $referrer ? $referrer->getLevelBadge() : '',
             'role' => $request->role,
         ]);
 
@@ -85,7 +81,7 @@ class RegisteredUserController extends Controller
         $referrer = User::find($user->referrer_id);
         if ($referrer) {
             $referrer->assignReferralPoints();
-        }      
+        }     
 
         Auth::login($user);
     
