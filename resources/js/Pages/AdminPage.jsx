@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import Plot from 'react-plotly.js';
 
@@ -52,34 +53,41 @@ const MetricsChart = ({ totalUsers, totalPointsAwarded, levelDistribution }) => 
     ];
 
     return (
-        <div className="mt-12">
-            <div className="flex">
-            <div className="mx-2 w-1/3">
-                <Plot data={usersChart} layout={{
-                    width: 300,
-                    height: 300,
-                    margin: { t: 20, b: 20, r: 40, l: 40 }
-                }} />
-            </div>
-            <div className="mx-2 w-1/3">
-                <Plot data={pointsChart} layout={{
-                    width: 300,
-                    height: 300,
-                    margin: { t: 20, b: 20, r: 40, l: 40 }
-                }} />
-            </div>            <div className="mx-auto w-1/3">
-                <Plot data={distributionChart} layout={{
-                    width: 400,
-                    height: 400,
-                    margin: { t: 20, b: 20, r: 40, l: 40 }
-                }} />
-            </div></div>
+        <div class="mt-12">
+            <div class="flex">
+                <div class="mx-2 w-1/3">
+                    <Plot data={usersChart} layout={{
+                        width: 300,
+                        height: 300,
+                        margin: { t: 20, b: 20, r: 40, l: 40 },
+                        paper_bgcolor: 'rgba(245, 245, 245, 1)',
+                        displaylogo: false,
+                    }} />
+                </div>
+                <div class="mx-2 w-1/3">
+                    <Plot data={pointsChart} layout={{
+                        width: 300,
+                        height: 300,
+                        margin: { t: 20, b: 20, r: 40, l: 40, },
+                        paper_bgcolor: 'rgba(245, 245, 245, 1)',
+                        displaylogo: false,
+                    }} />
+                </div>            
+                <div class=" w-1/3 ">
+                    <Plot data={distributionChart} layout={{
+                        width: 400,
+                        height: 400,
+                        margin: { t: 20, b: 20, r: 40, l: 40 },
+                        paper_bgcolor: 'rgba(245, 245, 245, 1)',
+                    }
+                    } />
+                </div></div>
 
         </div>
     );
 };
 
-export default function AdminPage({ users, referredUsers, totalUsers, totalPointsAwarded, levelDistribution }) {
+export default function AdminPage({ users, auth, totalUsers, totalPointsAwarded, levelDistribution, referredUsers }) {
     const [sortKey, setSortKey] = useState('name'); // Default sort key
     const [searchText, setSearchText] = useState('');
 
@@ -100,7 +108,10 @@ export default function AdminPage({ users, referredUsers, totalUsers, totalPoint
     );
 
     return (
-        <>
+        <AuthenticatedLayout
+            user={auth.user}
+            header={<h2 class="font-semibold text-xl text-gray-800 leading-tight">Admin</h2>}
+        >
             <Head title="AdminPage" />
             <div class="container mx-16 ">
 
@@ -120,14 +131,16 @@ export default function AdminPage({ users, referredUsers, totalUsers, totalPoint
                         <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                             <div class="overflow-hidden">
                                 <table class="min-w-full text-left text-sm font-light">
-                                    <thead class="border-b font-medium dark:border-neutral-500">
-                                        <tr>
+                                    <thead class="border-b border-neutral-300 font-medium dark:border-neutral-500">
+                                        <tr class="border-b border-neutral-300">
                                             <th scope="col" class="px-6 py-4 hover:cursor-pointer" title='click to sort' onClick={() => handleSort('name')}>Name</th>
                                             <th scope="col" class="px-6 py-4 hover:cursor-pointer" title='click to sort' onClick={() => handleSort('email')}>Email</th>
                                             <th scope="col" class="px-6 py-4 hover:cursor-pointer" title='click to sort' onClick={() => handleSort('created_at')}>
                                                 Registration Date</th>
                                             <th scope="col" class="px-6 py-4 ">
                                                 Total Points Earned</th>
+                                                <th scope="col" class="px-6 py-4 ">
+                                                Number of Reffered Users</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -137,24 +150,26 @@ export default function AdminPage({ users, referredUsers, totalUsers, totalPoint
                                                 <td class="whitespace-nowrap px-6 py-4">{user.email}</td>
                                                 <td class="whitespace-nowrap px-6 py-4">{user.created_at}</td>
                                                 <td class="whitespace-nowrap px-6 py-4">{user.referral_points}</td>
+                                                <td class="whitespace-nowrap px-6 py-4">{user.referred_users}</td>
+                                                
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div>
-                            <MetricsChart
+                            <div>
+                            <MetricsChart 
                                 totalUsers={totalUsers}
                                 totalPointsAwarded={totalPointsAwarded}
                                 levelDistribution={levelDistribution}
-                            />
-                        </div>
-                    </div>
-                    <a href="/dashboard" class=" relative btn btn-primary mx-auto mb-12 hover:text-lg">Go to Dashboard</a>
+                            />                            
+                            </div>                        
 
+                        </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </>
+        </AuthenticatedLayout>
     );
 }

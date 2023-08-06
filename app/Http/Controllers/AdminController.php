@@ -12,13 +12,17 @@ class AdminController extends Controller
     {
         // Fetch user data for the user management table
         $users = User::select('id', 'name', 'email', 'created_at', 'referral_points')
+
             ->withCount('referrals')
             ->withSum('referrals', 'referral_points')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $referredUsers = User::with('referrer')->get('username');
-
+        $users->transform(function ($user) {
+            $user->referred_users = $user->referrals_count;
+            $user->total_points = $user->referral_points;
+            return $user;
+        });
 
         // Calculate system metrics
         $totalUsers = User::count();
@@ -27,11 +31,12 @@ class AdminController extends Controller
             ->groupBy('level')
             ->get();
 
+
         return Inertia::render('AdminPage', [
             'users' => $users,
-            'referredUsers' => $referredUsers,
             'totalUsers' => $totalUsers,
             'totalPointsAwarded' => $totalPointsAwarded,
-            'levelDistribution' => $levelDistribution,        ]);
+            'levelDistribution' => $levelDistribution,
+        ]);
     }
 }

@@ -87,7 +87,11 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'referrer_id', 'id');
     }
 
-    
+    public function referredUsers()
+    {
+        return $this->hasMany(User::class, 'referrer_id');
+    }
+
 
     public function getLevel(): string
     {
